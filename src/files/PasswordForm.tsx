@@ -57,6 +57,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSuccess, onError }) => {
             <input
               type="password"
               name="currentPassword"
+              autoComplete="current-password"
               value={formData.currentPassword}
               onChange={handleChange}
               className="pl-10 w-full p-2 border rounded-md"
@@ -72,6 +73,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSuccess, onError }) => {
             <input
               type="password"
               name="password"
+              autoComplete="new-password"
               value={formData.password}
               onChange={handleChange}
               className="pl-10 w-full p-2 border rounded-md"
@@ -88,6 +90,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSuccess, onError }) => {
             <input
               type="password"
               name="passwordConfirmation"
+              autoComplete="new-password"
               value={formData.passwordConfirmation}
               onChange={handleChange}
               className="pl-10 w-full p-2 border rounded-md"
@@ -99,7 +102,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSuccess, onError }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex justify-center items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="w-full flex justify-center items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? <Loader2 className="animate-spin" /> : <Save className="w-5 h-5 mr-2" />}
           Update Password

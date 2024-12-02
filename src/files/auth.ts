@@ -1,54 +1,87 @@
-// src/types/auth.ts
+// src/services/auth.ts
 
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  provider?: string;
-  confirmed?: boolean;
-  blocked?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import { LoginCredentials, RegisterCredentials, User, AuthResponse, UpdateProfileData } from '../types/auth';
 
-export interface LoginCredentials {
-  identifier: string;
-  password: string;
-}
+export class AuthService {
+  private static readonly API_URL = 'http://localhost:1337/api';
 
-export interface RegisterCredentials {
-  username: string;
-  email: string;
-  password: string;
-}
+  private static async handleResponse<T>(response: Response): Promise<T> {
+    if (!response.ok) {
+      if (response.status === 401) {
+        // Clear invalid auth data
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('user');
+      }
+      
+      const error = await response.json();
+      throw new Error(error.error?.message || 'An error occurred');
+    }
+    return response.json();
+  }
 
-export interface AuthResponse {
-  jwt: string;
-  user: User;
-}
+  private static getAuthHeader(): HeadersInit {
+    const token = localStorage.getItem('jwt');
+    return {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+  }
 
-export interface ApiError {
-  error: {
-    status: number;
-    name: string;
-    message: string;
-    details?: any;
-  };
-}
+  static async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    const response = await fetch(`${this.API_URL}/auth/local`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    });
 
-export interface AuthState {
-  isAuthenticated: boolean;
-  user: User | null;
-  token: string | null;
-}
+    return this.handleResponse<AuthResponse>(response);
+  }
 
-export interface UpdateProfileData {
-  username?: string;
-  email?: string;
-}
+  static async register(credentials: RegisterCredentials): Promise<void> {
+    const response = await fetch(`${this.API_URL}/auth/local/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    });
 
-export interface ChangePasswordData {
-  currentPassword: string;
-  password: string;
-  passwordConfirmation: string;
+    await this.handleResponse(response);
+  }
+
+  static async getCurrentUser(): Promise<User> {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+
+    const response = await fetch(`${this.API_URL}/users/me`, {
+      headers: this.getAuthHeader(),
+    });
+
+    return this.handleResponse<User>(response);
+  }
+
+  static async updateProfile(data: UpdateProfileData): Promise<User> {
+    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    if (!userId) {
+      throw new Error('User ID not found');
+    }
+
+    const response = await fetch(`${this.API_URL}/users/${userId}`, {
+      method: 'PUT',
+      headers: this.getAuthHeader(),
+      body: JSON.stringify(data),
+    });
+
+    return this.handleResponse<User>(response);
+  }
+
+  static async changePassword(data: { currentPassword: string; password: string; passwordConfirmation: string }): Promise<void> {
+    const response = await fetch(`${this.API_URL}/auth/change-password`, {
+      method: 'POST',
+      headers: this.getAuthHeader(),
+      body: JSON.stringify(data),
+    });
+
+    await this.handleResponse(response);
+  }
 }

@@ -48,3 +48,4 @@ export default tseslint.config({
   },
 })
 ```
+https://equipements.sports.gouv.fr/api/records/1.0/boundingbox/?refine.equip_acc_libre=false&geofilter.bbox=-45.58328975600631,-63.28125,66.23145747862573,114.9609375&dataset=data-es&timezone=Europe%2FParis&lang=fr

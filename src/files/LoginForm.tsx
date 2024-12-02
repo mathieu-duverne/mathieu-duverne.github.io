@@ -56,6 +56,7 @@ const LoginForm: React.FC = () => {
               type="email"
               id="identifier"
               name="identifier"
+			  autoComplete="email"
               value={credentials.identifier}
               onChange={handleChange}
               className="pl-10 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -74,6 +75,7 @@ const LoginForm: React.FC = () => {
               type="password"
               id="password"
               name="password"
+			  autoComplete="current-password"
               value={credentials.password}
               onChange={handleChange}
               className="pl-10 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
