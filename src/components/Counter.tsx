@@ -9,10 +9,6 @@ const Counter = () => {
     setCount(count + 1)
   }
 
-  const handleInputChange = (e) => {
-    // No type annotation for event parameter
-    setInputValue(e.target.value)
-  }
 
   const handleSubmit = () => {
     // No type checking when parsing string to number
@@ -27,7 +23,6 @@ const Counter = () => {
       <div>
         <input 
           value={inputValue}
-          onChange={handleInputChange}
           placeholder="Enter a number"
         />
         <button onClick={handleSubmit}>Add to counter</button>
