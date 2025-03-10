@@ -9,7 +9,7 @@ function App() {
       <div className="relative">
         <Portfolio />
         <div className="fixed bottom-0 right-0 z-50">
-          <CreativePortfolioChat />
+          {/* <CreativePortfolioChat /> */}
         </div>
       </div>
     </LanguageProvider>
