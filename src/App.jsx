@@ -2,7 +2,7 @@ import React from 'react';
 // import CreativePortfolioChat from "./components/CreativePortfolioChat";
 import Portfolio from "./components/Portfolio";
 import { LanguageProvider } from "./context/LanguageContext";
-
+ 
 function App() {
   return (
     <LanguageProvider>
